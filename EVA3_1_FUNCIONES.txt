@@ -1,0 +1,39 @@
+CREATE DEFINER=`root`@`localhost` FUNCTION `suma`(num1 int , num2 int) 
+RETURNS int(11)
+
+BEGIN
+
+	declare op int;
+
+	set op = num1 + num2;
+
+
+RETURN op;
+
+END
+
+ MySQL  localhost:3306  evaluacion_3  SQL > select suma(10,20);
++-------------+
+| suma(10,20) |
++-------------+
+|          30 |
++-------------+
+-------------------------------------------------------------------------------------
+
+CREATE DEFINER=`root`@`localhost` FUNCTION `contar_clientes`() RETURNS int(11)
+
+BEGIN
+	
+	declare cuenta int;
+
+	select count(*)  into cuenta from customers;
+
+RETURN cuenta;
+END
+
+ MySQL  localhost:3306 ssl  northwind  SQL > select cuenta_clientes();
++-------------------+
+| cuenta_clientes() |
++-------------------+
+|                91 |
++-------------------+

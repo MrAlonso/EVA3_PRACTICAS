@@ -1,0 +1,80 @@
+CREATE DEFINER=`root`@`localhost` FUNCTION `Generador_de_RFC`(nombre text, ap_pat text, ap_mat text, fecha date) 
+RETURNS text CHARSET latin1
+
+BEGIN
+
+    declare letra_pat text;
+
+    declare letra_mat text;
+
+    declare letra_nom text;
+
+    declare mes_texto text;
+
+    declare dia_texto text;
+
+    declare anio int;
+
+    declare mes int;
+
+    declare dia int;
+
+    declare clave text;
+
+    
+    set letra_pat = left(ap_pat,2);
+
+    set letra_nom = left(nombre,1);
+
+    
+    if length(ap_mat) > 0 then
+
+		set letra_mat = left(ap_mat,2);
+
+	else
+
+		set letra_mat = 'X';
+
+	end if;
+
+        
+	set anio = year(fecha);
+
+    set mes = month(fecha);
+
+    set dia = dayofmonth(fecha);
+
+    set anio = right(year(fecha),2);
+
+    
+    if mes < 10 then
+
+		set mes_texto = concat('0',mes);
+
+	else
+
+		set mes_texto = dia;
+
+	end if;
+
+        
+	if dia < 10 then
+
+		set dia_texto = concat('0',dia);
+
+	else
+
+		set dia_texto = dia;
+
+	end if;
+
+    
+    set clave = upper(concat(letras_pat,letras_mat,letras_nom,annio,mes_texto,dia_texto));
+    
+
+
+RETURN clave;
+
+END
+
+

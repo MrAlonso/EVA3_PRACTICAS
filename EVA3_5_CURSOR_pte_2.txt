@@ -1,0 +1,56 @@
+CREATE DEFINER=`root`@`localhost` FUNCTION `asigna_rfc`() 
+RETURNS int(11)
+BEGIN
+
+
+    declare nombre_txt text;
+
+    declare ap_pat_txt text;
+
+    declare ap_mat_txt text;
+
+    declare fecha_nac date;
+
+    declare employee_id text;
+
+    declare rfc_ text;
+
+    
+    
+    declare fin_cursor int default false; 
+    declare cursor_employees cursor for
+
+    SELECT EmployeeID,FirstName,LastName,BirthDate FROM empleados_copia;
+    declare continue handler for not found set fin_cursor = true;
+
+    
+    set ap_mat_txt = '';
+    open cursor_employees;
+
+    
+
+    ciclo_cursor: loop
+
+        fetch cursor_employees into employee_id,nombre_txt,ap_pat_txt,fecha_nac;
+
+        if fin_cursor then
+
+			leave ciclo_cursor;
+
+		else 
+			
+	set rfc_ = Generador_de_RFC(nombre_txt,ap_pat_txt,ap_mat_txt,fecha_nac);
+
+            UPDATE empleados_copia SET RFC = rfc_ WHERE EmployeeID = employee_id;
+
+		end if;
+
+    end loop;
+
+    
+    close cursor_employees;
+
+
+RETURN 1;
+
+END

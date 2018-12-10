@@ -1,0 +1,63 @@
+MySQL Shell 8.0.12
+
+Copyright (c) 2016, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+
+
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+
+ MySQL  SQL > \connect -c root@localhost
+The -c option is deprecated, please use --mysql or -mc instead
+Creating a Classic session to 'root@localhost'
+Please provide the password for 'root@localhost': ****
+Save password for 'root@localhost:3306'? [Y]es/[N]o/Ne[v]er (default No): y
+Fetching schema names for autocompletion... Press ^C to stop.
+Your MySQL connection id is 48
+Server version: 8.0.12 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+
+ MySQL  localhost:3306 ssl  SQL > \use northwind
+
+CREATE TABLE empleados` (
+  `id_empleados` INT NOT NULL AUTO_INCREMENT,
+
+	  `nombre` VARCHAR(50) NULL,
+
+ 	 `apellido` VARCHAR(50) NULL,
+
+  	`fecha_nacimiento` DATE NULL,
+
+  	`salario` INT NULL,
+
+  	`rfc` VARCHAR(13) NULL,
+
+  	PRIMARY KEY (`id_empleados`));
+
+
+MySQL  localhost:3306 ssl  SQL > \use evaluacion3;
+
+alter table empleados add apellido_mat varchar(50) after apellido;
+
+insert into empleados (nombre , apellido ,apellido_mat, fecha_nacimiento, salario) values ('juan', 'perez', 'sosa' , '1998-04-20' , 10000);
+
+select * from empleados;
+
+CREATE DEFINER=`root`@`localhost` TRIGGER `empleados_BEFORE_INSERT` BEFORE INSERT ON `empleados` FOR EACH ROW 
+BEGIN
+	
+if New.salario < 10000 then
+ 
+    signal sqlstate '45000' set message_text = 'pague más tacaño';
+
+    end if;
+
+    
+    set new.rfc = asignarRFC();
+
+END
